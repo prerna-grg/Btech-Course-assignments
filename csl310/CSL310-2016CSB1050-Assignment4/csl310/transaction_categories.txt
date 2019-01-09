@@ -1,0 +1,8 @@
+Tax
+salary
+grocery
+medical
+phone bill
+dining
+entertainment
+money transfer 

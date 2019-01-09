@@ -1,0 +1,9 @@
+Run the sql file:
+source ~/Desktop/CSL310-2016CSB1050-Assignment310/myBank.sql;
+Enter the csl310 directory
+To run the code first explicitly compile DataAccessLayer.java using:
+javac -cp mysql-connector.jar:. DataAccessLayer.java
+Next compile the Main file using:
+javac Main.java
+To run the code use:
+java -cp mysql-connector.jar:. Main -i or -q
