@@ -1,0 +1,5 @@
+<sample>
+    <calculation>a1*b2</calculation>
+    <calculation>a1+b2</calculation>
+    <calculation>a1-b2</calculation>
+</sample>

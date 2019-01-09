@@ -1,0 +1,68 @@
+OS:
+	id: 200
+	name: Ubuntu
+	version: 16.04
+	arch: 64 bit
+	limits:
+		max_open_files: 2000
+		max_connections: 1000
+	provides_libs: [lxml, gcc, foo, bar]
+
+OS:
+	id: 201
+	name: Fedore
+	version: 23
+	arch: 32 bit
+	limits:
+		max_open_files: 1500
+		max_connections: 700
+	provides_libs: [lib_a, lib_b, lib_image, bar]
+
+Machine:
+	id: 120
+	type: Physical
+	OS: 200	
+	RAM: 16 GB
+	disk: 6 TB
+	CPU: 16 cores
+
+Machine:
+	id: 121
+	type: Virtual
+	OS: 201
+	RAM: 4 GB
+	disk: 256 GB
+	CPU: 2 cores
+
+SoftwareApp:
+	id: 300
+	name: MySQL Server
+	requires_hardware:
+		min_RAM: 512 MB
+		min_disk: 4 GB
+		min_CPU: 2 cores
+	requires_software:
+		OS: [200, 201]
+		libs: [lxml, gcc, foo, bar]
+
+SoftwareApp:
+	id: 300
+	name: Apache Web Server
+	requires_hardware:
+		min_RAM: 512 MB
+		min_disk: 1 GB
+		min_CPU: 2 cores
+	requires_software:
+		OS: [200]
+		libs: [lib_a, gcc, lib_b, bar]
+
+SoftwareApp:
+	id: 300
+	name: ImageProcessing Server
+	requires_hardware:
+		min_RAM: 2 MB
+		min_disk: 100 GB
+		min_CPU: 8 cores
+	requires_software:
+		OS: [200]
+		libs: [keras, gcc, lib_image, bar]

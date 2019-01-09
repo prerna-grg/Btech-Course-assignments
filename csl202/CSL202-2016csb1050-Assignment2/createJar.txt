@@ -1,0 +1,6 @@
+Go to the directory having the class files only and run:
+
+jar cvf algorithms.jar .
+
+This will create a protected jar file, make sure that there are no java files in the folder.
+

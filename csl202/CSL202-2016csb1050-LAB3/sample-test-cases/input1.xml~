@@ -1,0 +1,4 @@
+<p>This one <em>has <strong>overlapping</em> strong tag with em</strong></p>
+<p>This one <em>has <strong>unclosed strong tag</em></p>
+<P>This one <em12>has different case for opening and closing P, and em12 has digits in the tag name</em12></p>
+

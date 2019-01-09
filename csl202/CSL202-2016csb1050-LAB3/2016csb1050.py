@@ -1,0 +1,93 @@
+import re
+import sys
+
+"""
+The function takes a filename as input and checks if it's text is a valid xml document , if yes it returns a string "well formed".... if no it return a string "Not well-formed"
+"""
+def checkFile(filename):
+	xml_start = re.compile("[<][?]\\s*[x][m][l][^?]*[?][>]") # <?xml?>
+	xml_comment = re.compile("[<][!][-][-][^-]*[-][-][>]") # comments in xml file
+	my_xml_start = re.compile("[<][^>]*[>]") # any tag enclosed in <>
+	my_xml_open = re.compile("[<][^/>]*[>]") # opening tag
+	name = re.compile("[\\s]*[^\\s]*") # name in the opening tag is the first string till ay /s char is found
+	small_name = re.compile("^[a-z]+$") # small case names
+	large_name = re.compile("^[A-Z]+$") # capital case names
+	empty_tag = re.compile("^[<][^/]+[/][>]$") # empty tags like < something />
+	doc_decl = re.compile("[<][!][^>]+[>]") # DOCTYPE declarations
+	with open(filename) as fp:
+		data = fp.read().replace('\n', '')
+		my_list = my_xml_start.findall(data)
+		stack = []
+		root_found = 0
+		for my_tag in my_list:
+			if re.search(xml_start, my_tag) != None:
+				pass # tag of type <?xml?>
+				
+			elif re.search(xml_comment , my_tag) != None:
+				pass # ignore comments
+				
+			elif re.search( empty_tag , my_tag) != None:
+				pass # tag of type <abc/> or <abc def=1 />
+				
+			elif re.search( doc_decl , my_tag) != None:
+				pass # tag of type <!DOCTYPE note SYSTEM "Note.dtd">
+				
+			else:
+				root_found = 1
+				if re.search(my_xml_start , my_tag) != None:
+					if re.search(my_xml_open , my_tag) != None:
+						stack.append(my_tag) # opening tag
+					else:
+						if not stack:
+							return "Not well-formed" # found closing tag but stack does not have opening tag
+						opening = stack.pop()
+						o1 = opening # initialise
+						o2 = my_tag # initialise
+						o1 = o1.replace('>' , '') # remove unwanted chars
+						o1 = o1.replace('<' , '')  # remove unwanted chars
+						o2 = o2.replace('>' , '')  # remove unwanted chars
+						o2 = o2.replace('<' , '')  # remove unwanted chars
+						o2 = o2.replace('/' , '')  # remove unwanted chars
+						o1 = re.findall( name , o1 )[0] # taking actual name out of string i.e. for <title id=0> ... o1 = title
+						o2 = re.findall( name , o2 )[0]
+						o1 = o1.replace( ' ' , '')  # remove unwanted whitespace i.e converting " note" to "note"
+						o2 = o2.replace( ' ' , '') # remove unwanted whitespace i.e converting " note" to "note"
+						if re.search( small_name , o1 )!= None :
+							o1 = re.findall( small_name , o1 )[0]
+							if re.search( small_name , o2 )!= None :
+								o2 = re.findall(small_name , o2 )[0]
+								pass
+							else:
+								return "Not well-formed" # both not small
+								
+						elif re.search( large_name , o1 )!= None :
+							o1 = re.findall(large_name , o1 )[0]
+							if re.search( large_name , o2 )!= None :
+								o2 = re.findall(large_name ,o2 )[0]
+								pass
+							else:
+								return "Not well-formed" # both not large
+						
+						else:
+							return "Not well-formed" # are not formed of alphabet characters
+							
+						if o1 == o2 :
+							pass
+						else:
+							return "Not well-formed" # are not same
+							
+	if root_found != 1:
+		return "Not well-formed" # root element not found
+		
+	if not stack:			
+		return "well formed" # everything okay
+	else:
+		return "Not well-formed" # stack not empty ... some opening tag not closed
+
+if(len(sys.argv)<2):
+	print("Invalid format")
+	print("Usage: python 2016csb1050.py INPUT_FILE")
+else:
+	filename = sys.argv[1]
+	print(checkFile(filename))
+
